@@ -25,7 +25,6 @@ jobs:
       - setup_remote_docker
       - run: docker build -t ariecc101/karsajobs-ui:latest ./karsajobs-ui
       - run: docker tag ariecc101/karsajobs-ui:latest ghcr.io/ariecc101/karsajobs-ui:latest
-      - run: export GITHUB_PACKAGES_TOKEN=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
       - run: echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u ariecc101 --password-stdin
       - run: docker push ghcr.io/ariecc101/karsajobs-ui:latest
   test-app:
@@ -42,7 +41,6 @@ jobs:
       - setup_remote_docker
       - run: docker build -t ariecc101/karsajobs:latest ./karsajobs
       - run: docker tag ariecc101/karsajobs:latest ghcr.io/ariecc101/karsajobs:latest
-      - run: export GITHUB_PACKAGES_TOKEN=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
       - run: echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u ariecc101 --password-stdin
       - run: docker push ghcr.io/ariecc101/karsajobs:latest
 
