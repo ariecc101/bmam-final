@@ -1,0 +1,3 @@
+Github Repo : https://github.com/ariecc101/bmam-final
+Github Package Frontend : https://github.com/users/ariecc101/packages/container/package/karsajobs-ui
+Github Package Backend : https://github.com/users/ariecc101/packages/container/package/karsajobs
