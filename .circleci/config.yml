@@ -1,0 +1,64 @@
+version: 2.1
+
+jobs:
+  lint-frontend-dockerfile:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker pull hadolint/hadolint
+      - run: docker run -rm -i ghcr.io/hadolint/hadolint < karsajobs-ui/Dockerfile
+  lint-backend-dockerfile:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker pull hadolint/hadolint
+      - run: docker run -rm -i ghcr.io/hadolint/hadolint < karsajobs/Dockerfile
+  build-app-karsajobs-ui:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t ariecc101/karsajobs-ui:latest ./karsajobs-ui
+      - run: docker tag ariecc101/karsajobs-ui:latest ghcr.io/ariecc101/karsajobs-ui:latest
+      - run: export GITHUB_PACKAGES_TOKEN=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
+      - run: echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u ariecc101 --password-stdin
+      - run: docker push ghcr.io/ariecc101/karsajobs-ui:latest
+  test-app:
+    docker:
+      - image: cimg/go:1.19.3
+    steps:
+      - checkout
+      - run: cd karsajobs && go test -v -short --count=1 $(go list ./...)
+  build-app-karsajobs
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t ariecc101/karsajobs:latest ./karsajobs
+      - run: docker tag ariecc101/karsajobs:latest ghcr.io/ariecc101/karsajobs:latest
+      - run: export GITHUB_PACKAGES_TOKEN=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
+      - run: echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u ariecc101 --password-stdin
+      - run: docker push ghcr.io/ariecc101/karsajobs:latest
+
+workflows:
+  frontend-workflows:
+    jobs:
+      - lint-frontend-dockerfile
+      - build-app-karsajobs-ui:
+          requires:
+            - lint-frontend-dockerfile
+  backend-workflows:
+    jobs:
+      - lint-backend-dockerfile
+      - test-app
+          requires:
+            - lint-backend-dockerfile
+      - build-app-karsajobs:
+          requires:
+            - test-app
