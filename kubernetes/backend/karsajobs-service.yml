@@ -1,0 +1,15 @@
+#Version API
+apiVersion: v1
+#Type of object
+kind: Service
+metadata:
+  #create service karsajobs-backend with spec label app karsajobs and port 8080 label type: backend
+  name: karsajobs-backend
+  labels:
+    app: karsajobs
+spec:
+  ports:
+    - port: 8080
+  selector:
+    type: backend
+  type: NodePort

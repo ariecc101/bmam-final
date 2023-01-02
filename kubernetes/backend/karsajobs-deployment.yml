@@ -1,0 +1,47 @@
+#Version API
+apiVersion: apps/v1
+#Type of object
+kind: Deployment
+metadata:
+  #Create name karsajobs-backend and label
+  name: karsajobs-backend 
+  labels:
+    app: karsajobs
+    type: backend
+#Config of spec deployment with 1 replicate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: backend
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        type: backend
+    #Config of spec container in pod
+    spec:
+      containers:
+        #name of container
+        - name: karsajobs-backend-server
+          #use image from ghcr.io/ariecc101/karsajobs:latest
+          image: ghcr.io/ariecc101/karsajobs:latest
+          #expose port 8080
+          ports:
+            - containerPort: 8080
+          #config of enviroment APP_PORT, MONGO_HOST, MONGO_USER and MONGO_PASS. MONGO_USER and MONGO_PASS get from 'mongo/mongo-secret.yml'
+          env:
+            - name: APP_PORT
+              value: '8080'
+            - name: MONGO_HOST
+              value: mongodb
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_ROOT_USERNAME
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_ROOT_PASSWORD

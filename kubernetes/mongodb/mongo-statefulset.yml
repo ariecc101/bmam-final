@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+#config of spec Statefulset
+spec:
+  selector:
+    matchLabels:
+      type: db
+  #name service StatefulSet
+  serviceName: mongodb
+  #total replica
+  replicas: 1
+  #minimum number of seconds should be ready without crashing
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        type: db
+    spec:
+      #minimum number of seconds will be Terminating 
+      terminationGracePeriodSeconds: 10
+      containers:
+        - image: mongo:latest
+          name: mongodb
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          volumeMounts:
+            - name: mongodb-persistent-storage
+              mountPath: /data/db
+            - name: mongodb-secret-mount
+              mountPath: /etc/mongo-credentials
+            - name: mongodb-config-mount
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: mongodb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pv-claim
+        - name: mongodb-secret-mount
+          secret:
+            secretName: mongodb-secret
+        - name: mongodb-config-mount
+          configMap:
+            name: mongodb-config
+            items:
+              - key: mongo.conf
+                path: mongo.conf

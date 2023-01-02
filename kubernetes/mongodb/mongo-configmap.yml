@@ -1,0 +1,9 @@
+#create configmap mangodb-config and save to mango.conf in path has define
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-config
+data:
+  mongo.conf: |
+    storage:
+      dbPath: /data/db

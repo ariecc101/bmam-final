@@ -1,0 +1,15 @@
+#Version API
+apiVersion: v1
+#Type of object
+kind: Service
+metadata:
+  #create service karsajobs-ui with spec label app karsajobs and port 8080 label type: frontend
+  name: karsajobs-ui
+  labels:
+    app: karsajobs
+spec:
+  ports:
+    - port: 8000
+  selector:
+    type: frontend
+  type: NodePort

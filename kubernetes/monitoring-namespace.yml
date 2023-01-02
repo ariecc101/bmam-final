@@ -1,0 +1,5 @@
+#create namespace monitoring for prometheus and grafana
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring

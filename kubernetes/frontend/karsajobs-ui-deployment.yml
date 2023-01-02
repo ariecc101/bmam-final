@@ -1,0 +1,31 @@
+#Version API
+apiVersion: apps/v1
+#Type of object
+kind: Deployment
+metadata:
+  #Create name karsajobs-ui and label
+  name: karsajobs-ui
+  labels:
+    app: karsajobs
+    type: frontend
+#Config of spec deployment with 1 replicate    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: frontend
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        type: frontend
+    #Config of spec container in pod
+    spec:
+      containers:
+        #name of container
+        - name: karsajobs-frontend-app
+          #use image from ghcr.io/ariecc101/karsajobs-ui:latest
+          image: ghcr.io/ariecc101/karsajobs-ui:latest
+          #expose port 8080 to pod and map prot 8080 to container
+          ports:
+            - containerPort: 8000

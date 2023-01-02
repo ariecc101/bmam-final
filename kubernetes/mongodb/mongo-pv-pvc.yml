@@ -1,0 +1,26 @@
+#create persistentvolume name mongodb-pv-volume to store mangodbdata with 4 gigabytes and mount to /mnt/data/mongodb and only mounted 1 node
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv-volume
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: '/mnt/data/mongodb'
+---
+#claim mongodb-pv-claim with 4 gigabyte, manual and ReadWriteOnce
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
