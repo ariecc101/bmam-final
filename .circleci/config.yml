@@ -56,7 +56,7 @@ workflows:
   backend-workflows:
     jobs:
       - lint-backend-dockerfile
-      - test-app
+      - test-app:
           requires:
             - lint-backend-dockerfile
       - build-app-karsajobs:
