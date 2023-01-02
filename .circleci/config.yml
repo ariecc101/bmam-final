@@ -8,7 +8,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: docker pull hadolint/hadolint
-      - run: docker run --rm -i hadolint/hadolint < karsajobs-ui/Dockerfile
+      - run: docker run --rm -i hadolint/hadolint < karsajobs-fe/Dockerfile
   lint-backend-dockerfile:
     docker:
       - image: cimg/base:stable
@@ -16,14 +16,14 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: docker pull hadolint/hadolint
-      - run: docker run --rm -i hadolint/hadolint < karsajobs/Dockerfile
+      - run: docker run --rm -i hadolint/hadolint < karsajobs-be/Dockerfile
   build-app-karsajobs-ui:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker
-      - run: docker build -t ariecc101/karsajobs-ui:latest ./karsajobs-ui
+      - run: docker build -t ariecc101/karsajobs-ui:latest ./karsajobs-fe
       - run: docker tag ariecc101/karsajobs-ui:latest ghcr.io/ariecc101/karsajobs-ui:latest
       - run: echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u ariecc101 --password-stdin
       - run: docker push ghcr.io/ariecc101/karsajobs-ui:latest
